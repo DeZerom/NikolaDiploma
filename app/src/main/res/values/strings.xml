@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">SaladDetector</string>
+    <string name="tv_take_photo">Take photo</string>
+    <string name="tv_description">Select a preset image or take a new photo</string>
+    <string name="tv_placeholder">Object detection demo</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="allOrders_string">All orders</string>
+</resources>
