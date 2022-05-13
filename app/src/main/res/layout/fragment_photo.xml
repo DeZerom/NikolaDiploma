@@ -8,7 +8,7 @@
     tools:context=".src.fragments.photo_fragment.PhotoFragment" >
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/photoFragment_imageView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:src="@drawable/ic_camera"
@@ -25,7 +25,7 @@
         app:layout_constraintGuide_end="96dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton"
+        android:id="@+id/photoFragment_confirmPhotoFab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
@@ -37,18 +37,19 @@
         app:layout_constraintTop_toTopOf="@+id/guideline2" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton2"
+        android:id="@+id/photoFragment_takePhotoFab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:clickable="true"
         android:src="@drawable/ic_camera"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
-        tools:layout_editor_absoluteX="177dp" />
+        app:layout_constraintEnd_toStartOf="@+id/photoFragment_confirmPhotoFab"
+        app:layout_constraintStart_toEndOf="@+id/photoFragment_choosePhotoFab"
+        app:layout_constraintTop_toBottomOf="@+id/photoFragment_imageView" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton3"
+        android:id="@+id/photoFragment_choosePhotoFab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"

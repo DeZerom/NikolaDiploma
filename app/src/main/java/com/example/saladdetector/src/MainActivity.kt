@@ -34,6 +34,7 @@ import androidx.core.content.FileProvider
 import androidx.exifinterface.media.ExifInterface
 import androidx.lifecycle.lifecycleScope
 import com.example.saladdetector.R
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.tensorflow.lite.support.image.TensorImage
@@ -46,6 +47,7 @@ import java.util.*
 import kotlin.math.max
 import kotlin.math.min
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     companion object {
         const val TAG = "TFLite - ODT"
