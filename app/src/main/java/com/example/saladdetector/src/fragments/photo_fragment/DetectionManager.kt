@@ -18,10 +18,18 @@ class DetectionManager(context: Context) {
         options
     )
 
-    fun detect(bitmap: Bitmap) {
+    fun detect(bitmap: Bitmap): Array<String> {
         val image = TensorImage.fromBitmap(bitmap)
-
-        //TODO распарсить это как-то красиво
         val results = detector.detect(image)
+
+        val tmp = ArrayList<String>(results.size)
+        for (det in results) {
+            for (cat in det.categories) {
+                val label = cat.label
+                if (!tmp.contains(label)) tmp.add(label)
+            }
+        }
+
+        return tmp.toTypedArray()
     }
 }

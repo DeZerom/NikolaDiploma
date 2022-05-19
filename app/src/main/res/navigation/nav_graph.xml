@@ -18,5 +18,18 @@
         android:id="@+id/photoFragment"
         android:name="com.example.saladdetector.src.fragments.photo_fragment.PhotoFragment"
         android:label="fragment_photo"
-        tools:layout="@layout/fragment_photo" />
+        tools:layout="@layout/fragment_photo" >
+        <action
+            android:id="@+id/action_photoFragment_to_orderOverview"
+            app:destination="@id/orderOverview" />
+    </fragment>
+    <fragment
+        android:id="@+id/orderOverview"
+        android:name="com.example.saladdetector.src.fragments.order_overview.OrderOverview"
+        android:label="fragment_order_overview"
+        tools:layout="@layout/fragment_order_overview" >
+        <argument
+            android:name="detectedValues"
+            app:argType="string[]" />
+    </fragment>
 </navigation>

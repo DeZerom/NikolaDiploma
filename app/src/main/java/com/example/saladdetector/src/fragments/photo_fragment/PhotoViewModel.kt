@@ -36,6 +36,9 @@ class PhotoViewModel(
     val bitmapNeeded: LiveData<Boolean> = _bitmapNeeded
     private var currentBitmap: Bitmap? = null
 
+    private val _detectedProducts = MutableLiveData<Array<String>?>()
+    val detectedProducts: LiveData<Array<String>?> = _detectedProducts
+
     val btnListener = View.OnClickListener {
         when (it.id) {
             R.id.photoFragment_takePhotoFab -> {
@@ -47,7 +50,7 @@ class PhotoViewModel(
             R.id.photoFragment_confirmPhotoFab -> {
                 _bitmapNeeded.value = true
                 currentBitmap?.let { bitmap ->
-                    detectionManager.detect(bitmap)
+                    _detectedProducts.value = detectionManager.detect(bitmap)
                 } ?: run { _waitingForPhotoToast.value = true}
             }
         }
@@ -74,6 +77,10 @@ class PhotoViewModel(
     fun gotBitmap(bitmap: Bitmap?) {
         currentBitmap = bitmap
         _bitmapNeeded.value = false
+    }
+
+    fun detectedProductsCollected() {
+        _detectedProducts.value = null
     }
 
     companion object {

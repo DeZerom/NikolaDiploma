@@ -17,6 +17,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.saladdetector.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.hilt.android.AndroidEntryPoint
@@ -77,6 +78,14 @@ class PhotoFragment : Fragment() {
             if (!it) return@observe
             val bitmap = imageView.drawable.toBitmap()
             viewModel.gotBitmap(bitmap)
+        }
+
+        viewModel.detectedProducts.observe(viewLifecycleOwner) {
+            it ?: return@observe
+            val a = PhotoFragmentDirections.actionPhotoFragmentToOrderOverview(it)
+            findNavController().navigate(a)
+
+            viewModel.detectedProductsCollected()
         }
     }
 
