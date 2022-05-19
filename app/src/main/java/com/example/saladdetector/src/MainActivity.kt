@@ -69,40 +69,6 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        if (requestCode == REQUEST_IMAGE_CAPTURE &&
-//            resultCode == Activity.RESULT_OK
-//        ) {
-//            setViewAndDetect(getCapturedImage())
-//        }
-//    }
-//
-//    /**
-//     * onClick(v: View?)
-//     *      Detect touches on the UI components
-//     */
-//    override fun onClick(v: View?) {
-//        when (v?.id) {
-//            R.id.captureImageFab -> {
-//                try {
-//                    dispatchTakePictureIntent()
-//                } catch (e: ActivityNotFoundException) {
-//                    Log.e(TAG, e.message.toString())
-//                }
-//            }
-//            R.id.imgSampleOne -> {
-//                setViewAndDetect(getSampleImage(R.drawable.img_meal_one))
-//            }
-//            R.id.imgSampleTwo -> {
-//                setViewAndDetect(getSampleImage(R.drawable.img_meal_two))
-//            }
-//            R.id.imgSampleThree -> {
-//                setViewAndDetect(getSampleImage(R.drawable.img_meal_three))
-//            }
-//        }
-//    }
-//
 //    /**
 //     * runObjectDetection(bitmap: Bitmap)
 //     *      TFLite Object Detection function

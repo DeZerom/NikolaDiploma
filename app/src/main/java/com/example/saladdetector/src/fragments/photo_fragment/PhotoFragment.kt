@@ -3,14 +3,18 @@ package com.example.saladdetector.src.fragments.photo_fragment
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Picture
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.saladdetector.R
@@ -23,7 +27,9 @@ class PhotoFragment : Fragment() {
     private val photoPicker = registerForActivityResult(ActivityResultContracts.GetContent()) {
         viewModel.gotImageUri(it)
     }
-    private val viewModel: PhotoViewModel by viewModels{ PhotoViewModelFactory(photoPicker) }
+    private val viewModel: PhotoViewModel by viewModels{
+        PhotoViewModelFactory(photoPicker, DetectionManager(requireContext()))
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,8 +61,8 @@ class PhotoFragment : Fragment() {
             imageView.setImageBitmap(it)
         }
 
-        viewModel.imageUri.observe(viewLifecycleOwner) {
-            imageView.setImageURI(it)
+        viewModel.imageUri.observe(viewLifecycleOwner) { uri ->
+            imageView.setImageURI(uri)
         }
 
         viewModel.waitingForPhotoToast.observe(viewLifecycleOwner) {
@@ -65,6 +71,12 @@ class PhotoFragment : Fragment() {
                     R.string.waitingForPhoto_toast, Toast.LENGTH_LONG).show()
                 viewModel.waitingForPhotoToastShown()
             }
+        }
+
+        viewModel.bitmapNeeded.observe(viewLifecycleOwner) {
+            if (!it) return@observe
+            val bitmap = imageView.drawable.toBitmap()
+            viewModel.gotBitmap(bitmap)
         }
     }
 
