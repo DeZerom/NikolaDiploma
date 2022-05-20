@@ -7,12 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.RecyclerView
 import com.example.saladdetector.R
 
 class OrderOverview : Fragment() {
 
     private val args by navArgs<OrderOverviewArgs>()
     private val detectedProducts by lazy { args.detectedValues }
+    private val recyclerAdapter = OrdersRecycleAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,13 +27,9 @@ class OrderOverview : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val textView = view.findViewById<TextView>(R.id.textView)
-
-        val builder = StringBuilder()
-        detectedProducts.forEach {
-            builder.append(it).append(" ")
-        }
-
-        textView.text = builder.toString()
+        val recycler = view.findViewById<RecyclerView>(R.id.ordersOverview_recycler)
+        recycler.adapter = recyclerAdapter
+        //TODO передавать сюда массив DetectedProduct
+        recyclerAdapter.submitList(detectedProducts.toList())
     }
 }
