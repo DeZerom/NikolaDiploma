@@ -13,7 +13,7 @@ import com.example.saladdetector.R
 class OrderOverview : Fragment() {
 
     private val args by navArgs<OrderOverviewArgs>()
-    private val detectedProducts by lazy { args.detectedValues }
+    private val detectedProducts by lazy { args.detectedProducts }
     private val recyclerAdapter = OrdersRecycleAdapter()
 
     override fun onCreateView(
@@ -29,7 +29,6 @@ class OrderOverview : Fragment() {
 
         val recycler = view.findViewById<RecyclerView>(R.id.ordersOverview_recycler)
         recycler.adapter = recyclerAdapter
-        //TODO передавать сюда массив DetectedProduct
         recyclerAdapter.submitList(detectedProducts.toList())
     }
 }

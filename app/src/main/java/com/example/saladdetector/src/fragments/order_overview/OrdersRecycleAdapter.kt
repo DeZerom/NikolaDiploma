@@ -1,5 +1,6 @@
 package com.example.saladdetector.src.fragments.order_overview
 
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -17,9 +18,8 @@ class OrdersRecycleAdapter: ListAdapter<DetectedProduct,
     class DetectedProductViewHolder(view: View): RecyclerView.ViewHolder(view) {}
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetectedProductViewHolder {
-        return DetectedProductViewHolder(parent.run { View.inflate(this.context,
-            R.layout.detected_product_row,
-            this) })
+        return DetectedProductViewHolder(LayoutInflater.from(parent.context)
+            .inflate(R.layout.detected_product_row, parent, false))
     }
 
     override fun onBindViewHolder(holder: DetectedProductViewHolder, position: Int) {
