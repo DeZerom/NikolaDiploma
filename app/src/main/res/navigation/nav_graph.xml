@@ -29,7 +29,7 @@
         android:label="fragment_order_overview"
         tools:layout="@layout/fragment_order_overview" >
         <argument
-            android:name="detectedValues"
+            android:name="detectedProducts"
             app:argType="com.example.saladdetector.src.domain_entyties.DetectedProduct[]" />
     </fragment>
 </navigation>

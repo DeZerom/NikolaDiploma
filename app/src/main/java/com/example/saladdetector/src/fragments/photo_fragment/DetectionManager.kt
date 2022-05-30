@@ -23,13 +23,12 @@ class DetectionManager(context: Context) {
         val image = TensorImage.fromBitmap(bitmap)
         val results = detector.detect(image)
 
-        var i = 1
         val tmp = ArrayList<DetectedProduct>(results.size)
+        var i = 1 //TODO placeholder
         for (det in results) {
             for (cat in det.categories) {
-                val detectedProduct = DetectedProduct(cat.label, i++.toDouble())
-                if (!tmp.contains(detectedProduct)) tmp.add(detectedProduct)
-
+                val prod = DetectedProduct(cat.label, (i++).toDouble())
+                if (!tmp.contains(prod)) tmp.add(prod)
             }
         }
 
