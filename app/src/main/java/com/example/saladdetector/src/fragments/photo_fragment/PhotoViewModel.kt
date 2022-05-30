@@ -11,6 +11,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.saladdetector.R
+import com.example.saladdetector.src.domain_entyties.DetectedProduct
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.tensorflow.lite.task.vision.detector.Detection
@@ -36,8 +37,8 @@ class PhotoViewModel(
     val bitmapNeeded: LiveData<Boolean> = _bitmapNeeded
     private var currentBitmap: Bitmap? = null
 
-    private val _detectedProducts = MutableLiveData<Array<String>?>()
-    val detectedProducts: LiveData<Array<String>?> = _detectedProducts
+    private val _detectedProducts = MutableLiveData<Array<DetectedProduct>?>()
+    val detectedProducts: LiveData<Array<DetectedProduct>?> = _detectedProducts
 
     val btnListener = View.OnClickListener {
         when (it.id) {

@@ -3,6 +3,7 @@ package com.example.saladdetector.src.fragments.photo_fragment
 import android.content.Context
 import android.graphics.Bitmap
 import android.util.Log
+import com.example.saladdetector.src.domain_entyties.DetectedProduct
 import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.task.vision.detector.ObjectDetector
 
@@ -18,15 +19,17 @@ class DetectionManager(context: Context) {
         options
     )
 
-    fun detect(bitmap: Bitmap): Array<String> {
+    fun detect(bitmap: Bitmap): Array<DetectedProduct> {
         val image = TensorImage.fromBitmap(bitmap)
         val results = detector.detect(image)
 
-        val tmp = ArrayList<String>(results.size)
+        var i = 1
+        val tmp = ArrayList<DetectedProduct>(results.size)
         for (det in results) {
             for (cat in det.categories) {
-                val label = cat.label
-                if (!tmp.contains(label)) tmp.add(label)
+                val detectedProduct = DetectedProduct(cat.label, i++.toDouble())
+                if (!tmp.contains(detectedProduct)) tmp.add(detectedProduct)
+
             }
         }
 
