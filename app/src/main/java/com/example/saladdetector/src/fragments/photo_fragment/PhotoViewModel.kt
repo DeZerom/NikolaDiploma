@@ -1,21 +1,20 @@
 package com.example.saladdetector.src.fragments.photo_fragment
 
-import android.graphics.Bitmap
+import android.graphics.*
 import android.net.Uri
-import android.util.Log
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.ActivityResultRegistry
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.saladdetector.R
 import com.example.saladdetector.src.domain_entyties.DetectedProduct
-import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.lifecycle.HiltViewModel
+import com.example.saladdetector.src.round
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.tensorflow.lite.task.vision.detector.Detection
-import javax.inject.Inject
+import kotlin.random.Random
 
 class PhotoViewModel(
     private val photoPicker: ActivityResultLauncher<String>,
@@ -33,12 +32,13 @@ class PhotoViewModel(
     private val _waitingForPhotoToast = MutableLiveData(false)
     val waitingForPhotoToast: LiveData<Boolean> = _waitingForPhotoToast
 
-    private val _bitmapNeeded = MutableLiveData(false)
-    val bitmapNeeded: LiveData<Boolean> = _bitmapNeeded
     private var currentBitmap: Bitmap? = null
 
     private val _detectedProducts = MutableLiveData<Array<DetectedProduct>?>()
     val detectedProducts: LiveData<Array<DetectedProduct>?> = _detectedProducts
+    val navigateToOrderScreen = MutableLiveData<Array<DetectedProduct>?>()
+
+    val isLoading: MutableLiveData<Boolean> = MutableLiveData(false)
 
     val btnListener = View.OnClickListener {
         when (it.id) {
@@ -49,10 +49,7 @@ class PhotoViewModel(
                 photoPicker.launch(MIME_IMAGE)
             }
             R.id.photoFragment_confirmPhotoFab -> {
-                _bitmapNeeded.value = true
-                currentBitmap?.let { bitmap ->
-                    _detectedProducts.value = detectionManager.detect(bitmap)
-                } ?: run { _waitingForPhotoToast.value = true}
+                navigateToOrderScreen.value = _detectedProducts.value
             }
         }
     }
@@ -76,12 +73,85 @@ class PhotoViewModel(
     }
 
     fun gotBitmap(bitmap: Bitmap?) {
-        currentBitmap = bitmap
-        _bitmapNeeded.value = false
+        viewModelScope.launch(Dispatchers.IO) {
+            isLoading.postValue(true)
+            bitmap?.let { b ->
+                val results: List<Detection> = detectionManager.detect(b) ?: emptyList()
+                val tmp = ArrayList<DetectedProduct>(results.size)
+                var i = 0 //TODO placeholder
+                for (det in results) {
+                    for (cat in det.categories) {
+                        val prod = DetectedProduct(
+                            cat.label,
+                            round(Random.nextDouble(10.0, 100.0), 2)
+                        )
+                        if (!tmp.contains(prod)) tmp.add(prod)
+                    }
+                }
+
+                _detectedProducts.postValue(tmp.toTypedArray())
+
+                val resultToDisplay = results.map {
+                    // Get the top-1 category and craft the display text
+                    val category = it.categories.first()
+                    val text = "${category.label}, ${category.score.times(100).toInt()}%"
+
+                    // Create a data object to display the detection result
+                    DetectionResult(it.boundingBox, text)
+                }
+                val imgWithResult = drawDetectionResult(bitmap, resultToDisplay)
+
+                currentBitmap = imgWithResult
+                _bitmap.postValue(imgWithResult)
+                isLoading.postValue(false)
+            } ?: run {
+                _waitingForPhotoToast.postValue(true)
+                isLoading.postValue(false)
+            }
+        }
     }
 
-    fun detectedProductsCollected() {
-        _detectedProducts.value = null
+    /**
+     * Draw a box around each objects and show the object's name.
+     */
+    private suspend fun drawDetectionResult(
+        bitmap: Bitmap,
+        detectionResults: List<DetectionResult>
+    ): Bitmap {
+        val outputBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
+        val canvas = Canvas(outputBitmap)
+        val pen = Paint()
+        pen.textAlign = Paint.Align.LEFT
+
+        detectionResults.forEach {
+            // draw bounding box
+            pen.color = Color.RED
+            pen.strokeWidth = 4F
+            pen.style = Paint.Style.STROKE
+            val box = it.boundingBox
+            canvas.drawRect(box, pen)
+
+            val tagSize = Rect(0, 0, 0, 0)
+
+            // calculate the right font size
+            pen.style = Paint.Style.FILL_AND_STROKE
+            pen.color = Color.YELLOW
+            pen.strokeWidth = 2F
+            pen.textSize = 20f
+            pen.getTextBounds(it.text, 0, it.text.length, tagSize)
+            val fontSize: Float = pen.textSize * box.width() / tagSize.width()
+
+            // adjust the font size so texts are inside the bounding box
+            if (fontSize < pen.textSize) pen.textSize = fontSize
+
+            var margin = (box.width() - tagSize.width()) / 2.0F
+            if (margin < 0F) margin = 0F
+            canvas.drawText(
+                it.text, box.left + margin,
+                box.top + tagSize.height().times(1F), pen
+            )
+        }
+        return outputBitmap
     }
 
     companion object {

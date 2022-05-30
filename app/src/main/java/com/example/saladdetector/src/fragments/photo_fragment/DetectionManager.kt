@@ -2,14 +2,13 @@ package com.example.saladdetector.src.fragments.photo_fragment
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.util.Log
-import com.example.saladdetector.src.domain_entyties.DetectedProduct
 import org.tensorflow.lite.support.image.TensorImage
+import org.tensorflow.lite.task.vision.detector.Detection
 import org.tensorflow.lite.task.vision.detector.ObjectDetector
 
 class DetectionManager(context: Context) {
     private val options = ObjectDetector.ObjectDetectorOptions.builder()
-        .setMaxResults(5)
+        .setMaxResults(50)
         .setScoreThreshold(0.3f)
         .build()
 
@@ -19,19 +18,8 @@ class DetectionManager(context: Context) {
         options
     )
 
-    fun detect(bitmap: Bitmap): Array<DetectedProduct> {
+    suspend fun detect(bitmap: Bitmap): MutableList<Detection>? {
         val image = TensorImage.fromBitmap(bitmap)
-        val results = detector.detect(image)
-
-        val tmp = ArrayList<DetectedProduct>(results.size)
-        var i = 1 //TODO placeholder
-        for (det in results) {
-            for (cat in det.categories) {
-                val prod = DetectedProduct(cat.label, (i++).toDouble())
-                if (!tmp.contains(prod)) tmp.add(prod)
-            }
-        }
-
-        return tmp.toTypedArray()
+        return detector.detect(image)
     }
 }
