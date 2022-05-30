@@ -10,9 +10,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.saladdetector.R
 import com.example.saladdetector.src.domain_entyties.DetectedProduct
+import com.example.saladdetector.src.round
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.tensorflow.lite.task.vision.detector.Detection
+import kotlin.random.Random
 
 class PhotoViewModel(
     private val photoPicker: ActivityResultLauncher<String>,
@@ -79,7 +81,10 @@ class PhotoViewModel(
                 var i = 0 //TODO placeholder
                 for (det in results) {
                     for (cat in det.categories) {
-                        val prod = DetectedProduct(cat.label, (i++).toDouble())
+                        val prod = DetectedProduct(
+                            cat.label,
+                            round(Random.nextDouble(10.0, 100.0), 2)
+                        )
                         if (!tmp.contains(prod)) tmp.add(prod)
                     }
                 }

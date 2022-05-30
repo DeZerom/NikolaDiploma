@@ -8,7 +8,7 @@ import org.tensorflow.lite.task.vision.detector.ObjectDetector
 
 class DetectionManager(context: Context) {
     private val options = ObjectDetector.ObjectDetectorOptions.builder()
-        .setMaxResults(5)
+        .setMaxResults(50)
         .setScoreThreshold(0.3f)
         .build()
 
