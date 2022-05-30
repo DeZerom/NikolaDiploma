@@ -7,9 +7,11 @@ import kotlinx.parcelize.Parcelize
 data class DetectedProduct(
     val name: String,
     val price: Double,
+    val weight: Double,
+    val amount: Int
 ): Parcelable {
     val id: Int
         get() {
-            return (name + price.toString()).hashCode()
+            return name.hashCode()
         }
 }

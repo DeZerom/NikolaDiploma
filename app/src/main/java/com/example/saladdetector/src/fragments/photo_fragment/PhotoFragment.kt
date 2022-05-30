@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.saladdetector.R
+import com.example.saladdetector.src.repos.ProductRepository
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -27,7 +28,8 @@ class PhotoFragment : Fragment(R.layout.fragment_photo) {
         viewModel.gotImageUri(it)
     }
     private val viewModel: PhotoViewModel by viewModels {
-        PhotoViewModelFactory(photoPicker, DetectionManager(requireContext()))
+        PhotoViewModelFactory(photoPicker, DetectionManager(requireContext()),
+            ProductRepository(requireContext()))
     }
 
     private lateinit var progressBar: ProgressBar

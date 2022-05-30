@@ -34,7 +34,8 @@
         android:src="@drawable/ic_baseline_arrow_forward_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline2" />
+        app:layout_constraintTop_toTopOf="@+id/guideline2"
+        android:focusable="true" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/photoFragment_takePhotoFab"
@@ -46,7 +47,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/photoFragment_confirmPhotoFab"
         app:layout_constraintStart_toEndOf="@+id/photoFragment_choosePhotoFab"
-        app:layout_constraintTop_toBottomOf="@+id/photoFragment_imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/photoFragment_imageView"
+        android:focusable="true" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/photoFragment_choosePhotoFab"
@@ -58,7 +60,8 @@
         android:src="@drawable/ic_baseline_photo_library_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline2" />
+        app:layout_constraintTop_toTopOf="@+id/guideline2"
+        android:focusable="true" />
 
     <ProgressBar
         android:id="@+id/photoFragment_progressBar"
