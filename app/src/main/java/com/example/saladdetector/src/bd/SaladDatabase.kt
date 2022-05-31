@@ -16,9 +16,14 @@ abstract class SaladDatabase: RoomDatabase() {
     companion object {
         private var instance: SaladDatabase? = null
 
-        private val MIGRATION_1_2 = object : Migration(1, 2) {
-            override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("INSERT INTO products VALUES\n    (0, \"Baked Good\", 15.5, 25),\n    (1, \"Cheese\", 44, 30),\n    (2, \"Salad\", 23, 15),\n    (3, \"Seafood\", 55, 30),\n    (4, \"Tomato\", 20, 25)")
+        private val callback = object : Callback() {
+            override fun onCreate(db: SupportSQLiteDatabase) {
+                db.execSQL("INSERT INTO products VALUES\n" +
+                        "    (0, \"Baked Good\", 15.5, 25),\n" +
+                        "    (1, \"Cheese\", 44, 30),\n" +
+                        "    (2, \"Salad\", 23, 15),\n" +
+                        "    (3, \"Seafood\", 55, 30),\n" +
+                        "    (4, \"Tomato\", 20, 25)")
             }
         }
 
@@ -27,7 +32,7 @@ abstract class SaladDatabase: RoomDatabase() {
                 synchronized(this) {
                     instance = Room
                         .databaseBuilder(context, SaladDatabase::class.java, "SaladDb")
-                        .addMigrations(MIGRATION_1_2)
+                        .addCallback(callback)
                         .build()
                 }
             }
