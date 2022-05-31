@@ -20,7 +20,7 @@ class OrderOverview : Fragment(R.layout.fragment_order_overview) {
 
         val recycler = view.findViewById<RecyclerView>(R.id.ordersOverview_recycler)
         recycler.adapter = recyclerAdapter
-        view.findViewById<TextView>(R.id.detectedProductRow_summary).text =
+        view.findViewById<TextView>(R.id.oredersOverview_summary).text =
             getString(
                 R.string.price,
                 round(detectedProducts.sumOf { it.price }, 2).toString()

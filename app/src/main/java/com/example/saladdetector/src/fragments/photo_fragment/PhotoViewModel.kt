@@ -2,6 +2,7 @@ package com.example.saladdetector.src.fragments.photo_fragment
 
 import android.graphics.*
 import android.net.Uri
+import android.util.Log
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.lifecycle.LiveData
@@ -10,6 +11,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.saladdetector.R
 import com.example.saladdetector.src.domain_entyties.DetectedProduct
+import com.example.saladdetector.src.repos.ProductRepository
 import com.example.saladdetector.src.round
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,7 +20,8 @@ import kotlin.random.Random
 
 class PhotoViewModel(
     private val photoPicker: ActivityResultLauncher<String>,
-    private val detectionManager: DetectionManager
+    private val detectionManager: DetectionManager,
+    private val productRepository: ProductRepository
 ) : ViewModel() {
     private val _takePhoto = MutableLiveData(false)
     val takePhoto: LiveData<Boolean> = _takePhoto
@@ -78,14 +81,21 @@ class PhotoViewModel(
             bitmap?.let { b ->
                 val results: List<Detection> = detectionManager.detect(b) ?: emptyList()
                 val tmp = ArrayList<DetectedProduct>(results.size)
-                var i = 0 //TODO placeholder
                 for (det in results) {
                     for (cat in det.categories) {
-                        val prod = DetectedProduct(
-                            cat.label,
-                            round(Random.nextDouble(10.0, 100.0), 2)
-                        )
-                        if (!tmp.contains(prod)) tmp.add(prod)
+                        val dbProd = productRepository.getById(cat.index)
+                        if (tmp.any { return@any it.name == dbProd.name }) {
+                            val idx = tmp.indexOf(tmp.find{ return@find it.name == dbProd.name })
+                            tmp[idx] = tmp[idx].copy(amount = tmp[idx].amount + 1)
+                        } else {
+                            val prod = DetectedProduct(
+                                name = dbProd.name,
+                                price = dbProd.price,
+                                weight = dbProd.weight,
+                                amount = 1
+                            )
+                            tmp.add(prod)
+                        }
                     }
                 }
 

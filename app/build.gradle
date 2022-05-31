@@ -4,7 +4,7 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("kotlin-kapt")
     id("androidx.navigation.safeargs")
-    id('org.jetbrains.kotlin.android.extensions')
+    id("kotlin-parcelize")
 }
 
 android {
@@ -61,7 +61,5 @@ dependencies {
     annotationProcessor("androidx.room:room-compiler:2.4.2")
     kapt("androidx.room:room-compiler:2.4.2")
     implementation("androidx.room:room-ktx:2.4.2")
-
-
 
 }

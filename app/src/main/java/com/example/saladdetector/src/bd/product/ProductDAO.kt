@@ -7,6 +7,9 @@ import androidx.room.Query
 interface ProductDAO {
 
     @Query("SELECT * FROM products WHERE model_id in (:ids)")
-    fun getFromIds(ids: List<Int>): List<BdProduct>
+    suspend fun getFromIds(ids: List<Int>): List<BdProduct>
+
+    @Query("SELECT * FROM products WHERE model_id = :id")
+    suspend fun getById(id: Int): BdProduct
 
 }
