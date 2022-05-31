@@ -34,6 +34,9 @@
         <argument
             android:name="detectedProducts"
             app:argType="com.example.saladdetector.src.domain_entyties.DetectedProduct[]" />
+        <action
+            android:id="@+id/action_orderOverview_to_billSendingFragment"
+            app:destination="@id/billSendingFragment" />
     </fragment>
     <dialog
         android:id="@+id/passwordDialogFragment"
@@ -47,4 +50,13 @@
         android:id="@+id/ordersFragment"
         android:name="com.example.saladdetector.src.fragments.orders_fragment.OrdersFragment"
         android:label="OrdersFragment" />
+    <fragment
+        android:id="@+id/billSendingFragment"
+        android:name="com.example.saladdetector.src.fragments.bill_sending.BillSendingFragment"
+        android:label="fragment_bill_sending"
+        tools:layout="@layout/fragment_bill_sending" >
+        <action
+            android:id="@+id/action_billSendingFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
 </navigation>

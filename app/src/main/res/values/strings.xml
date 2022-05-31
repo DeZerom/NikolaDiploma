@@ -8,4 +8,5 @@
     <string name="waitingForPhoto_toast">Waiting for a photo...</string>
     <string name="price">%s руб.</string>
     <string name="amount">x %s шт.</string>
+    <string name="wrongEmailToast">Неверный email</string>
 </resources>

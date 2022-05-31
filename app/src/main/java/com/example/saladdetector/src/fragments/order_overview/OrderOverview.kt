@@ -2,8 +2,10 @@ package com.example.saladdetector.src.fragments.order_overview
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import com.example.saladdetector.R
@@ -26,5 +28,9 @@ class OrderOverview : Fragment(R.layout.fragment_order_overview) {
                 round(detectedProducts.sumOf { it.price * it.amount }, 2).toString()
             )
         recyclerAdapter.submitList(detectedProducts.toList())
+
+        view.findViewById<Button>(R.id.orderOverview_pay).setOnClickListener {
+            findNavController().navigate(R.id.action_orderOverview_to_billSendingFragment)
+        }
     }
 }
