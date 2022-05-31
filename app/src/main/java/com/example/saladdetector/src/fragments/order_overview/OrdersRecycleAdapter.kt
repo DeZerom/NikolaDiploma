@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.saladdetector.R
 import com.example.saladdetector.src.domain_entyties.DetectedProduct
+import com.example.saladdetector.src.round
 
 class OrdersRecycleAdapter :
     ListAdapter<DetectedProduct, OrdersRecycleAdapter.DetectedProductViewHolder>
@@ -26,9 +27,16 @@ class OrdersRecycleAdapter :
         val context = holder.itemView.context
         val name = holder.itemView.findViewById<TextView>(R.id.detectedProductRow_name)
         val price = holder.itemView.findViewById<TextView>(R.id.detectedProductRow_price)
+        val total = holder.itemView.findViewById<TextView>(R.id.detectedProductRow_total)
+        val amount = holder.itemView.findViewById<TextView>(R.id.detectedProductRow_amount)
 
+        val priceVal = currentList[position].price
+        val amountVal = currentList[position].amount
         name.text = currentList[position].name
-        price.text = context.getString(R.string.price, currentList[position].price.toString())
+        price.text = context.getString(R.string.price, priceVal.toString())
+        amount.text = context.getString(R.string.amount, amountVal.toString())
+        total.text = context.getString(R.string.price,
+            round(priceVal * amountVal, 2).toString())
     }
 
     companion object {

@@ -23,7 +23,7 @@ class OrderOverview : Fragment(R.layout.fragment_order_overview) {
         view.findViewById<TextView>(R.id.oredersOverview_summary).text =
             getString(
                 R.string.price,
-                round(detectedProducts.sumOf { it.price }, 2).toString()
+                round(detectedProducts.sumOf { it.price * it.amount }, 2).toString()
             )
         recyclerAdapter.submitList(detectedProducts.toList())
     }

@@ -7,4 +7,5 @@
     <string name="allOrders_string">All orders</string>
     <string name="waitingForPhoto_toast">Waiting for a photo...</string>
     <string name="price">%s руб.</string>
+    <string name="amount">x %s шт.</string>
 </resources>
