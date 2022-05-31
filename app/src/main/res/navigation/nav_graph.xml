@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_homeFragment_to_photoFragment"
             app:destination="@id/photoFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_passwordDialogFragment"
+            app:destination="@id/passwordDialogFragment" />
     </fragment>
     <fragment
         android:id="@+id/photoFragment"
@@ -32,4 +35,16 @@
             android:name="detectedProducts"
             app:argType="com.example.saladdetector.src.domain_entyties.DetectedProduct[]" />
     </fragment>
+    <dialog
+        android:id="@+id/passwordDialogFragment"
+        android:name="com.example.saladdetector.src.fragments.home_fragment.PasswordDialogFragment"
+        android:label="PasswordDialogFragment" >
+        <action
+            android:id="@+id/action_passwordDialogFragment_to_ordersFragment"
+            app:destination="@id/ordersFragment" />
+    </dialog>
+    <fragment
+        android:id="@+id/ordersFragment"
+        android:name="com.example.saladdetector.src.fragments.orders_fragment.OrdersFragment"
+        android:label="OrdersFragment" />
 </navigation>

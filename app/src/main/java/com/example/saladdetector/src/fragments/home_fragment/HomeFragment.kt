@@ -39,6 +39,7 @@ class HomeFragment : Fragment() {
 
         viewModel.navigateToAllOrdersFragment.observe(viewLifecycleOwner) {
             if (it) {
+                findNavController().navigate(R.id.action_homeFragment_to_passwordDialogFragment)
                 Toast.makeText(requireContext(),
                     "Navigated to all orders", Toast.LENGTH_SHORT).show()
                 viewModel.navigatedToAllOrdersFragment()
