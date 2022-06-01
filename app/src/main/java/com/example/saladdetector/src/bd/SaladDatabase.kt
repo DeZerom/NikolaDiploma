@@ -11,6 +11,7 @@ import com.example.saladdetector.src.bd.order.OrderDao
 import com.example.saladdetector.src.bd.product.BdProduct
 import com.example.saladdetector.src.bd.product.ProductDAO
 import com.example.saladdetector.src.bd.product_order.ProductInOrder
+import com.example.saladdetector.src.bd.product_order.ProductInOrderDao
 
 @Database(
     entities = [BdProduct::class, Order::class, ProductInOrder::class],
@@ -22,6 +23,7 @@ import com.example.saladdetector.src.bd.product_order.ProductInOrder
 abstract class SaladDatabase : RoomDatabase() {
     abstract fun productDao(): ProductDAO
     abstract fun orderDao(): OrderDao
+    abstract fun productInOrder(): ProductInOrderDao
 
     companion object {
         private var instance: SaladDatabase? = null

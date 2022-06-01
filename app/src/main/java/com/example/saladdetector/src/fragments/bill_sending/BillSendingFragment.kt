@@ -11,16 +11,24 @@ import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.saladdetector.R
+import com.example.saladdetector.src.domain_entyties.OrderInfo
 
 class BillSendingFragment : Fragment() {
 
     private val viewModel: BillSendingViewModel by viewModels()
+    private val orderInfo by lazy {
+        val args by navArgs<BillSendingFragmentArgs>()
+        args.orderInf
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        viewModel.orderInfo = orderInfo
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_bill_sending, container, false)
     }

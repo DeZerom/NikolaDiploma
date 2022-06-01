@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import com.example.saladdetector.R
+import com.example.saladdetector.src.domain_entyties.OrderInfo
 import com.example.saladdetector.src.round
 
 class OrderOverview : Fragment(R.layout.fragment_order_overview) {
@@ -16,6 +17,7 @@ class OrderOverview : Fragment(R.layout.fragment_order_overview) {
     private val args by navArgs<OrderOverviewArgs>()
     private val detectedProducts by lazy { args.detectedProducts }
     private val recyclerAdapter = OrdersRecycleAdapter()
+    private val orderInfo = OrderInfo()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -27,10 +29,13 @@ class OrderOverview : Fragment(R.layout.fragment_order_overview) {
                 R.string.price,
                 round(detectedProducts.sumOf { it.price * it.amount }, 2).toString()
             )
-        recyclerAdapter.submitList(detectedProducts.toList())
+        val listOfProducts = detectedProducts.toList()
+        recyclerAdapter.submitList(listOfProducts)
+        orderInfo.products = listOfProducts
 
         view.findViewById<Button>(R.id.orderOverview_pay).setOnClickListener {
-            findNavController().navigate(R.id.action_orderOverview_to_billSendingFragment)
+            val a = OrderOverviewDirections.actionOrderOverviewToBillSendingFragment(orderInfo)
+            findNavController().navigate(a)
         }
     }
 }

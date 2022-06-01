@@ -6,9 +6,23 @@ import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.saladdetector.R
+import com.example.saladdetector.src.domain_entyties.OrderInfo
+import com.example.saladdetector.src.domain_entyties.ProductInOrderRepository
+import com.example.saladdetector.src.repos.OrderRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class BillSendingViewModel: ViewModel() {
+@HiltViewModel
+class BillSendingViewModel @Inject constructor(
+    private val orderRepository: OrderRepository,
+    private val productInOrderRepository: ProductInOrderRepository
+): ViewModel() {
+
+    var orderInfo: OrderInfo = OrderInfo()
+    private var email: String = ""
 
     private var isValidEmail = false
 
@@ -30,6 +44,7 @@ class BillSendingViewModel: ViewModel() {
             }
 
             isValidEmail = s.contains('@') && s.contains('.')
+            if (isValidEmail) email = s.toString()
         }
     }
 
@@ -37,7 +52,12 @@ class BillSendingViewModel: ViewModel() {
         when (it.id) {
             R.id.billSending_doneBtn -> {
                 if (isValidEmail) {
-                    _navigateToHome.value = true
+                    viewModelScope.launch {
+                        orderInfo = orderInfo.copy(email = email)
+                        orderRepository.insertOrder(orderInfo)
+                        productInOrderRepository.insertAllProductsFromOrderInfo(orderInfo)
+                        _navigateToHome.postValue(true)
+                    }
                 } else {
                     _wrongEmailToast.value = true
                 }

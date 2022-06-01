@@ -1,7 +1,9 @@
 package com.example.saladdetector.src.bd.order
 
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.saladdetector.src.bd.product_order.ProductInOrder
 
 @Entity(tableName = "orders")
 data class Order(

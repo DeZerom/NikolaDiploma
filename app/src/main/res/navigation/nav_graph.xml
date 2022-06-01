@@ -58,5 +58,8 @@
         <action
             android:id="@+id/action_billSendingFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
+        <argument
+            android:name="orderInf"
+            app:argType="com.example.saladdetector.src.domain_entyties.OrderInfo" />
     </fragment>
 </navigation>
