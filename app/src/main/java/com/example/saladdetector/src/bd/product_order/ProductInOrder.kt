@@ -3,6 +3,7 @@ package com.example.saladdetector.src.bd.product_order
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import androidx.room.Relation
 import androidx.room.util.TableInfo
 import com.example.saladdetector.src.bd.order.Order
 
