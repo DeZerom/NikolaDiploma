@@ -1,17 +1,21 @@
 package com.example.saladdetector.src.bd
 
 import android.content.Context
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.example.saladdetector.src.bd.order.OrderDao
 import com.example.saladdetector.src.bd.product.BdProduct
 import com.example.saladdetector.src.bd.product.ProductDAO
 
-@Database(entities = [BdProduct::class], version = 2)
+@Database(entities = [BdProduct::class], version = 3, autoMigrations = [
+    AutoMigration(from = 2, to = 3)
+])
 abstract class SaladDatabase: RoomDatabase() {
     abstract fun productDao(): ProductDAO
+    abstract fun orderDao(): OrderDao
 
     companion object {
         private var instance: SaladDatabase? = null
