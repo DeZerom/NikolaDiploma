@@ -25,7 +25,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val toPhotoFr: Button = view.findViewById(R.id.homeFragment_takePhotoBtn)
-        val toAllOrdersFr: Button = view.findViewById(R.id.homeFragment_allOrdersBtn)
+        val toAllOrdersFr: View = view.findViewById(R.id.homeFragment_allOrdersBtn)
 
         toPhotoFr.setOnClickListener (viewModel.btnListener)
         toAllOrdersFr.setOnClickListener (viewModel.btnListener)
