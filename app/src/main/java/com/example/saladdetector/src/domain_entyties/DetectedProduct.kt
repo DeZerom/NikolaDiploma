@@ -8,10 +8,6 @@ data class DetectedProduct(
     val name: String,
     val price: Double,
     val weight: Double,
-    val amount: Int
-): Parcelable {
+    val amount: Int,
     val id: Int
-        get() {
-            return name.hashCode()
-        }
-}
+): Parcelable

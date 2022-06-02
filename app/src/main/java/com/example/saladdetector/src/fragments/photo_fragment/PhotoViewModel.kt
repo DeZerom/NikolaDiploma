@@ -2,7 +2,6 @@ package com.example.saladdetector.src.fragments.photo_fragment
 
 import android.graphics.*
 import android.net.Uri
-import android.util.Log
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.lifecycle.LiveData
@@ -12,11 +11,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.saladdetector.R
 import com.example.saladdetector.src.domain_entyties.DetectedProduct
 import com.example.saladdetector.src.repos.ProductRepository
-import com.example.saladdetector.src.round
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.tensorflow.lite.task.vision.detector.Detection
-import kotlin.random.Random
 
 class PhotoViewModel(
     private val photoPicker: ActivityResultLauncher<String>,
@@ -92,7 +89,8 @@ class PhotoViewModel(
                                 name = dbProd.name,
                                 price = dbProd.price,
                                 weight = dbProd.weight,
-                                amount = 1
+                                amount = 1,
+                                id = dbProd.id
                             )
                             tmp.add(prod)
                         }

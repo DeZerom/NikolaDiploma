@@ -19,9 +19,10 @@ class OrderRepository(context: Context) {
         }
     }
 
-    suspend fun insertOrder(orderInfo: OrderInfo) {
-        withContext(Dispatchers.IO) {
+    suspend fun insertOrder(orderInfo: OrderInfo): Int {
+        return withContext(Dispatchers.IO) {
             val order = orderInfo.toDbOrder()
+            orderDao.insertOrder(order).toInt()
         }
     }
 

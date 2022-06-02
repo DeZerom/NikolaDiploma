@@ -14,7 +14,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.saladdetector.R
 import com.example.saladdetector.src.domain_entyties.OrderInfo
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class BillSendingFragment : Fragment() {
 
     private val viewModel: BillSendingViewModel by viewModels()

@@ -1,7 +1,7 @@
 package com.example.saladdetector.src.di
 
 import android.content.Context
-import com.example.saladdetector.src.domain_entyties.ProductInOrderRepository
+import com.example.saladdetector.src.repos.ProductInOrderRepository
 import com.example.saladdetector.src.repos.OrderRepository
 import dagger.Module
 import dagger.Provides

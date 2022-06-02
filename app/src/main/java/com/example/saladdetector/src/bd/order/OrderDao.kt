@@ -12,6 +12,6 @@ interface OrderDao {
         suspend fun getOrdersWithProducts(): Map<Order, List<ProductInOrder>>
 
         @Insert
-        suspend fun insertOrder(order: Order)
+        suspend fun insertOrder(order: Order): Long
 
 }

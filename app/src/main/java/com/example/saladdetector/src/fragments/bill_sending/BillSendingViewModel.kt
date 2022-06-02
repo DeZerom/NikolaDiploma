@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.saladdetector.R
 import com.example.saladdetector.src.domain_entyties.OrderInfo
-import com.example.saladdetector.src.domain_entyties.ProductInOrderRepository
+import com.example.saladdetector.src.repos.ProductInOrderRepository
 import com.example.saladdetector.src.repos.OrderRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -54,8 +54,8 @@ class BillSendingViewModel @Inject constructor(
                 if (isValidEmail) {
                     viewModelScope.launch {
                         orderInfo = orderInfo.copy(email = email)
-                        orderRepository.insertOrder(orderInfo)
-                        productInOrderRepository.insertAllProductsFromOrderInfo(orderInfo)
+                        val orderId = orderRepository.insertOrder(orderInfo)
+                        productInOrderRepository.insertAllProductsFromOrderInfo(orderInfo, orderId)
                         _navigateToHome.postValue(true)
                     }
                 } else {
