@@ -1,6 +1,7 @@
 package com.example.saladdetector.src.repos
 
 import android.content.Context
+import android.util.Log
 import androidx.room.Query
 import com.example.saladdetector.src.bd.SaladDatabase
 import com.example.saladdetector.src.bd.order.Order
@@ -25,6 +26,7 @@ class OrderRepository(context: Context) {
     suspend fun getOrdersInfo(): List<OrderInfo> {
         return withContext(Dispatchers.IO) {
             val map = orderDao.getOrdersWithProducts()
+            Log.i("OrderRepository", map.toString())
             map.map {
                 OrderInfo(
                     totalSum = it.key.totalPrice,

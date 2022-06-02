@@ -49,7 +49,11 @@
     <fragment
         android:id="@+id/ordersFragment"
         android:name="com.example.saladdetector.src.fragments.orders_fragment.OrdersFragment"
-        android:label="OrdersFragment" />
+        android:label="OrdersFragment" >
+        <action
+            android:id="@+id/action_ordersFragment_to_orderDetails"
+            app:destination="@id/orderDetails" />
+    </fragment>
     <fragment
         android:id="@+id/billSendingFragment"
         android:name="com.example.saladdetector.src.fragments.bill_sending.BillSendingFragment"
@@ -60,6 +64,15 @@
             app:destination="@id/homeFragment" />
         <argument
             android:name="orderInf"
+            app:argType="com.example.saladdetector.src.domain_entyties.OrderInfo" />
+    </fragment>
+    <fragment
+        android:id="@+id/orderDetails"
+        android:name="com.example.saladdetector.src.fragments.user_order_details.OrderDetails"
+        android:label="fragment_order_details"
+        tools:layout="@layout/fragment_order_details" >
+        <argument
+            android:name="orderInfo"
             app:argType="com.example.saladdetector.src.domain_entyties.OrderInfo" />
     </fragment>
 </navigation>

@@ -1,10 +1,8 @@
 package com.example.saladdetector.src.bd
 
 import android.content.Context
-import androidx.room.AutoMigration
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
+import androidx.room.*
+import androidx.room.migration.AutoMigrationSpec
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.saladdetector.src.bd.order.Order
 import com.example.saladdetector.src.bd.order.OrderDao
@@ -13,11 +11,14 @@ import com.example.saladdetector.src.bd.product.ProductDAO
 import com.example.saladdetector.src.bd.product_order.ProductInOrder
 import com.example.saladdetector.src.bd.product_order.ProductInOrderDao
 
+@Suppress("ClassName")
 @Database(
     entities = [BdProduct::class, Order::class, ProductInOrder::class],
-    version = 4, autoMigrations = [
+    version = 6, autoMigrations = [
         AutoMigration(from = 2, to = 3),
-        AutoMigration(from = 3, to = 4)
+        AutoMigration(from = 3, to = 4),
+        AutoMigration(from = 4, to = 5, spec = SaladDatabase.AutoMigration_4_5::class),
+        AutoMigration(from = 5, to = 6, spec = SaladDatabase.AutoMigration_5_6::class)
     ],
     exportSchema = true,
 )
@@ -25,6 +26,12 @@ abstract class SaladDatabase : RoomDatabase() {
     abstract fun productDao(): ProductDAO
     abstract fun orderDao(): OrderDao
     abstract fun productInOrder(): ProductInOrderDao
+
+    @RenameColumn(fromColumnName = "id", toColumnName = "order_id", tableName = "orders")
+    class AutoMigration_4_5: AutoMigrationSpec
+
+    @RenameColumn(tableName = "Prod_in_ord", fromColumnName = "id", toColumnName = "prod_in_ord_id")
+    class AutoMigration_5_6: AutoMigrationSpec
 
     companion object {
         private var instance: SaladDatabase? = null

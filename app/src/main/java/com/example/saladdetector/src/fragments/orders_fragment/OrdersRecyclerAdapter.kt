@@ -4,16 +4,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.saladdetector.R
-import com.example.saladdetector.src.domain_entyties.DetectedProduct
 import com.example.saladdetector.src.domain_entyties.OrderInfo
-import com.example.saladdetector.src.fragments.order_overview.OrdersRecycleAdapter
+import com.example.saladdetector.src.round
 
 class UserOrdersRecyclerAdapter :
     ListAdapter<OrderInfo, UserOrdersRecyclerAdapter.UserOrderViewHolder>(DIFF_CALLBACK) {
+
+    var callback: Callback? = null
 
     class UserOrderViewHolder(view: View) : RecyclerView.ViewHolder(view) {}
 
@@ -25,12 +27,18 @@ class UserOrdersRecyclerAdapter :
     }
 
     override fun onBindViewHolder(holder: UserOrderViewHolder, position: Int) {
+        val context = holder.itemView.context
         val emailView = holder.itemView.findViewById<TextView>(R.id.userOrderRow_email)
         val sumView = holder.itemView.findViewById<TextView>(R.id.userOrderRow_totalSum)
+        val layout = holder.itemView.findViewById<ConstraintLayout>(R.id.userOrderRow_layout)
 
         val orderInfo = currentList[position]
         emailView.text = orderInfo.email
-        sumView.text = orderInfo.totalSum.toString()
+        sumView.text = context.getString(R.string.price, round(orderInfo.totalSum, 2).toString())
+
+        layout.setOnClickListener {
+            callback?.navigateToDetails(orderInfo)
+        }
     }
 
     companion object {
@@ -45,4 +53,7 @@ class UserOrdersRecyclerAdapter :
         }
     }
 
+    interface Callback {
+        fun navigateToDetails(item: OrderInfo)
+    }
 }

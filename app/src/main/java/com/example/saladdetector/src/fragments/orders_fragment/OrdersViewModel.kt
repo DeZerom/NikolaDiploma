@@ -27,6 +27,4 @@ class OrdersViewModel @Inject constructor(
         }
     }
 
-
-
 }
