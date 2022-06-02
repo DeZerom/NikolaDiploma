@@ -15,7 +15,7 @@ class ProductRepository(context: Context) {
         }
     }
 
-    suspend fun getById(id: Int): BdProduct {
+    suspend fun getById(id: Int): BdProduct? {
         return withContext(Dispatchers.IO) {
             dao.getById(id)
         }

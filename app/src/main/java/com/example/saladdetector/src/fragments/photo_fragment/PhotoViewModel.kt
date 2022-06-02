@@ -83,7 +83,7 @@ class PhotoViewModel(
                 val tmp = ArrayList<DetectedProduct>(results.size)
                 for (det in results) {
                     for (cat in det.categories) {
-                        val dbProd = productRepository.getById(cat.index)
+                        val dbProd = productRepository.getById(cat.index) ?: continue
                         if (tmp.any { return@any it.name == dbProd.name }) {
                             val idx = tmp.indexOf(tmp.find{ return@find it.name == dbProd.name })
                             tmp[idx] = tmp[idx].copy(amount = tmp[idx].amount + 1)

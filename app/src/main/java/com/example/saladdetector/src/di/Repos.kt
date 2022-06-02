@@ -1,15 +1,16 @@
 package com.example.saladdetector.src.di
 
 import android.content.Context
-import com.example.saladdetector.src.bd.product_order.ProductInOrder
 import com.example.saladdetector.src.domain_entyties.ProductInOrderRepository
 import com.example.saladdetector.src.repos.OrderRepository
+import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Singleton
+import dagger.hilt.components.SingletonComponent
 
-@InstallIn(Singleton::class)
+@Module
+@InstallIn(SingletonComponent::class)
 object ReposProvider {
 
     @Provides

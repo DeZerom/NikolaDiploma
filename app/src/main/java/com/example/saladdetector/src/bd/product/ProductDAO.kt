@@ -10,6 +10,6 @@ interface ProductDAO {
     suspend fun getFromIds(ids: List<Int>): List<BdProduct>
 
     @Query("SELECT * FROM products WHERE model_id = :id")
-    suspend fun getById(id: Int): BdProduct
+    suspend fun getById(id: Int): BdProduct?
 
 }
