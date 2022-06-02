@@ -13,7 +13,7 @@ class ProductInOrderRepository(context: Context) {
     suspend fun insertAllProductsFromOrderInfo(orderInfo: OrderInfo, orderId: Int) {
         withContext(Dispatchers.IO) {
             val dbProducts = orderInfo.products.map {
-                ProductInOrder(0, orderId, it.id)
+                ProductInOrder(0, orderId, it.id, it.amount)
             }
             dao.insertProducts(dbProducts)
         }

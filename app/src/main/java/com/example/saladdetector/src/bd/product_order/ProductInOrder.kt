@@ -1,9 +1,6 @@
 package com.example.saladdetector.src.bd.product_order
 
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
-import androidx.room.Relation
+import androidx.room.*
 import androidx.room.util.TableInfo
 import com.example.saladdetector.src.bd.order.Order
 
@@ -11,5 +8,6 @@ import com.example.saladdetector.src.bd.order.Order
 data class ProductInOrder(
     @PrimaryKey(autoGenerate = true) val id: Int,
     val orderId: Int,
-    val productId: Int
+    val productId: Int,
+    @ColumnInfo(defaultValue = 0.toString()) val productAmount: Int
 )

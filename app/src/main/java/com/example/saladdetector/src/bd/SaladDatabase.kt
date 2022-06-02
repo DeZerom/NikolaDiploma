@@ -15,8 +15,9 @@ import com.example.saladdetector.src.bd.product_order.ProductInOrderDao
 
 @Database(
     entities = [BdProduct::class, Order::class, ProductInOrder::class],
-    version = 3, autoMigrations = [
-        AutoMigration(from = 2, to = 3)
+    version = 4, autoMigrations = [
+        AutoMigration(from = 2, to = 3),
+        AutoMigration(from = 3, to = 4)
     ],
     exportSchema = true,
 )

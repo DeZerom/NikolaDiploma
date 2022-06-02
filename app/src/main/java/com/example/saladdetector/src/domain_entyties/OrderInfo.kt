@@ -6,7 +6,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class OrderInfo(
-    private var totalSum: Double = 0.0,
+    var totalSum: Double = 0.0,
     var email: String = "",
     var products: List<DetectedProduct> = emptyList()
 ): Parcelable {
