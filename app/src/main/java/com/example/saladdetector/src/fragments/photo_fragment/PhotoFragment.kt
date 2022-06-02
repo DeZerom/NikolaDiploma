@@ -7,9 +7,7 @@ import android.graphics.RectF
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.isVisible
@@ -18,7 +16,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.saladdetector.R
 import com.example.saladdetector.src.repos.ProductRepository
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -37,15 +34,15 @@ class PhotoFragment : Fragment(R.layout.fragment_photo) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val confirmFab: FloatingActionButton = view.findViewById(R.id.photoFragment_confirmPhotoFab)
-        val takePhotoFab: FloatingActionButton = view.findViewById(R.id.photoFragment_takePhotoFab)
-        val choosePhotoFab: FloatingActionButton = view.findViewById(R.id.photoFragment_choosePhotoFab)
+        val confirmBtn: Button = view.findViewById(R.id.photoFragment_confirmPhotoFab)
+        val takePhotoBtn: ImageButton = view.findViewById(R.id.photoFragment_takePhotoFab)
+        val choosePhotoBtn: ImageButton = view.findViewById(R.id.photoFragment_choosePhotoFab)
         val imageView: ImageView = view.findViewById(R.id.photoFragment_imageView)
         progressBar = view.findViewById(R.id.photoFragment_progressBar)
 
-        confirmFab.setOnClickListener(viewModel.btnListener)
-        takePhotoFab.setOnClickListener(viewModel.btnListener)
-        choosePhotoFab.setOnClickListener(viewModel.btnListener)
+        confirmBtn.setOnClickListener(viewModel.btnListener)
+        takePhotoBtn.setOnClickListener(viewModel.btnListener)
+        choosePhotoBtn.setOnClickListener(viewModel.btnListener)
 
 
         viewModel.isLoading.observe(viewLifecycleOwner) {
@@ -79,6 +76,7 @@ class PhotoFragment : Fragment(R.layout.fragment_photo) {
 
         viewModel.detectedProducts.observe(viewLifecycleOwner) {
             it ?: return@observe
+            confirmBtn.isVisible = it.isNullOrEmpty().not()
         }
 
         viewModel.navigateToOrderScreen.observe(viewLifecycleOwner) {
