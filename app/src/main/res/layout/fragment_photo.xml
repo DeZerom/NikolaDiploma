@@ -7,13 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".src.fragments.photo_fragment.PhotoFragment">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5" />
-
     <ImageView
         android:id="@+id/photoFragment_imageView"
         android:layout_width="match_parent"
@@ -37,6 +30,14 @@
         tools:visibility="visible"
         app:layout_constraintBottom_toTopOf="@id/photoFragment_takePhotoFab"
         app:layout_constraintEnd_toEndOf="parent" />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/photoFragment_takePhotoFab"
