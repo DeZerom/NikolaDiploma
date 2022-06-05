@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "455753924402",
+    "project_id": "nikoladiploma",
+    "storage_bucket": "nikoladiploma.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:455753924402:android:d2f2096a89548d4673e12b",
+        "android_client_info": {
+          "package_name": "com.example.saladdetector"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "455753924402-h2tg4s0h2fnsgh61r8mh4lluqgn2dq9i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAso7Kqii2iy5GQemF3bWW5FLJfyezkaww"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "455753924402-h2tg4s0h2fnsgh61r8mh4lluqgn2dq9i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
