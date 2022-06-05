@@ -2,26 +2,31 @@ package com.example.saladdetector.src.fragments.photo_fragment
 
 import android.graphics.*
 import android.net.Uri
+import android.provider.MediaStore
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
+import androidx.core.content.FileProvider
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.saladdetector.BuildConfig
 import com.example.saladdetector.R
 import com.example.saladdetector.src.domain_entyties.DetectedProduct
+import com.example.saladdetector.src.domain_entyties.OrderInfo
 import com.example.saladdetector.src.repos.ProductRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.tensorflow.lite.task.vision.detector.Detection
+import java.io.File
 
 class PhotoViewModel(
+    private val photoTaker: ActivityResultLauncher<Uri>,
     private val photoPicker: ActivityResultLauncher<String>,
     private val detectionManager: DetectionManager,
     private val productRepository: ProductRepository
 ) : ViewModel() {
-    private val _takePhoto = MutableLiveData(false)
-    val takePhoto: LiveData<Boolean> = _takePhoto
+    private val orderInfo: OrderInfo = OrderInfo()
 
     private val _bitmap = MutableLiveData<Bitmap?>(null)
     val bitmap: LiveData<Bitmap?> = _bitmap
@@ -43,7 +48,11 @@ class PhotoViewModel(
     val btnListener = View.OnClickListener {
         when (it.id) {
             R.id.photoFragment_takePhotoFab -> {
-                _takePhoto.value = true
+                orderInfo.imageUri = FileProvider.getUriForFile(it.context,
+                    "${BuildConfig.APPLICATION_ID}.provider",
+                    File(it.context.filesDir, "rawImages")
+                )
+                photoTaker.launch(orderInfo.imageUri)
             }
             R.id.photoFragment_choosePhotoFab -> {
                 photoPicker.launch(MIME_IMAGE)
@@ -52,10 +61,6 @@ class PhotoViewModel(
                 navigateToOrderScreen.value = _detectedProducts.value
             }
         }
-    }
-
-    fun takePhotoHandled() {
-        _takePhoto.value = false
     }
 
     fun waitingForPhotoToastShown() {
@@ -70,6 +75,10 @@ class PhotoViewModel(
     fun photoTaken(bitmap: Bitmap?) {
         bitmap ?: run { _waitingForPhotoToast.value = true }
         _bitmap.value = bitmap
+    }
+
+    fun photoSaved() {
+        _imageUri.value = orderInfo.imageUri
     }
 
     fun gotBitmap(bitmap: Bitmap?) {

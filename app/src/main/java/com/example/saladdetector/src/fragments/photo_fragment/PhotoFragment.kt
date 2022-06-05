@@ -4,7 +4,9 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.RectF
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.view.View
 import android.widget.*
@@ -24,8 +26,13 @@ class PhotoFragment : Fragment(R.layout.fragment_photo) {
         progressBar.isVisible = true
         viewModel.gotImageUri(it)
     }
+
+    private val photoTaker = registerForActivityResult(ActivityResultContracts.TakePicture()) {
+        if (it) viewModel.photoSaved()
+    }
+
     private val viewModel: PhotoViewModel by viewModels {
-        PhotoViewModelFactory(photoPicker, DetectionManager(requireContext()),
+        PhotoViewModelFactory(photoTaker, photoPicker, DetectionManager(requireContext()),
             ProductRepository(requireContext()))
     }
 
@@ -44,13 +51,8 @@ class PhotoFragment : Fragment(R.layout.fragment_photo) {
         takePhotoBtn.setOnClickListener(viewModel.btnListener)
         choosePhotoBtn.setOnClickListener(viewModel.btnListener)
 
-
         viewModel.isLoading.observe(viewLifecycleOwner) {
             progressBar.isVisible = it
-        }
-
-        viewModel.takePhoto.observe(viewLifecycleOwner) {
-            if (it) takePhoto()
         }
 
         viewModel.bitmap.observe(viewLifecycleOwner) {
@@ -84,24 +86,6 @@ class PhotoFragment : Fragment(R.layout.fragment_photo) {
             val a = PhotoFragmentDirections.actionPhotoFragmentToOrderOverview(it)
             findNavController().navigate(a)
         }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
-            viewModel.photoTaken(data?.extras?.get("data") as Bitmap)
-            progressBar.isVisible = true
-        }
-    }
-
-    private fun takePhoto() {
-        viewModel.takePhotoHandled()
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        requireActivity().startActivityFromFragment(this, intent, REQUEST_IMAGE_CAPTURE)
-    }
-
-    companion object {
-        const val REQUEST_IMAGE_CAPTURE = 1
     }
 }
 
