@@ -3,10 +3,14 @@ package com.example.saladdetector.src.repos
 import android.content.Context
 import com.example.saladdetector.src.bd.SaladDatabase
 import com.example.saladdetector.src.bd.product.BdProduct
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class ProductRepository(context: Context) {
+class ProductRepository @Inject constructor(
+    @ApplicationContext context: Context
+) {
     private val dao = SaladDatabase.getInstance(context).productDao()
 
     suspend fun getByIds(ids: List<Int>): List<BdProduct> {

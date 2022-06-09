@@ -1,13 +1,7 @@
 package com.example.saladdetector.src.fragments.photo_fragment
 
-import android.app.Activity
-import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.RectF
-import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
-import android.provider.MediaStore
 import android.view.View
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
@@ -31,15 +25,15 @@ class PhotoFragment : Fragment(R.layout.fragment_photo) {
         if (it) viewModel.photoSaved()
     }
 
-    private val viewModel: PhotoViewModel by viewModels {
-        PhotoViewModelFactory(photoTaker, photoPicker, DetectionManager(requireContext()),
-            ProductRepository(requireContext()))
-    }
+    private val viewModel: PhotoViewModel by viewModels()
 
     private lateinit var progressBar: ProgressBar
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewModel.photoTaker = photoTaker
+        viewModel.photoPicker = photoPicker
 
         val confirmBtn: Button = view.findViewById(R.id.photoFragment_confirmPhotoFab)
         val takePhotoBtn: ImageButton = view.findViewById(R.id.photoFragment_takePhotoFab)
@@ -55,7 +49,7 @@ class PhotoFragment : Fragment(R.layout.fragment_photo) {
             progressBar.isVisible = it
         }
 
-        viewModel.bitmap.observe(viewLifecycleOwner) {
+        viewModel.detectedProductsBitmap.observe(viewLifecycleOwner) {
             imageView.setImageBitmap(it)
         }
 
@@ -63,7 +57,7 @@ class PhotoFragment : Fragment(R.layout.fragment_photo) {
             uri ?: return@observe
             imageView.setImageURI(uri)
             val bitmap = imageView.drawable.toBitmap()
-            viewModel.gotBitmap(bitmap)
+            viewModel.gotBitmap(bitmap, requireContext())
         }
 
         viewModel.waitingForPhotoToast.observe(viewLifecycleOwner) {

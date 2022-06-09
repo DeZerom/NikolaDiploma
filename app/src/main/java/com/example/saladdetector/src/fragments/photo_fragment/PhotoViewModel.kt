@@ -1,8 +1,8 @@
 package com.example.saladdetector.src.fragments.photo_fragment
 
+import android.content.Context
 import android.graphics.*
 import android.net.Uri
-import android.provider.MediaStore
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.content.FileProvider
@@ -14,22 +14,29 @@ import com.example.saladdetector.BuildConfig
 import com.example.saladdetector.R
 import com.example.saladdetector.src.domain_entyties.DetectedProduct
 import com.example.saladdetector.src.domain_entyties.OrderInfo
+import com.example.saladdetector.src.repos.ImagesRepository
 import com.example.saladdetector.src.repos.ProductRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.tensorflow.lite.task.vision.detector.Detection
 import java.io.File
+import javax.inject.Inject
 
-class PhotoViewModel(
-    private val photoTaker: ActivityResultLauncher<Uri>,
-    private val photoPicker: ActivityResultLauncher<String>,
+@HiltViewModel
+class PhotoViewModel @Inject constructor(
     private val detectionManager: DetectionManager,
-    private val productRepository: ProductRepository
+    private val productRepository: ProductRepository,
+    private val imagesRepository: ImagesRepository
 ) : ViewModel() {
+
+    lateinit var photoTaker: ActivityResultLauncher<Uri>
+    lateinit var photoPicker: ActivityResultLauncher<String>
+
     private val orderInfo: OrderInfo = OrderInfo()
 
-    private val _bitmap = MutableLiveData<Bitmap?>(null)
-    val bitmap: LiveData<Bitmap?> = _bitmap
+    private val _detectedProductsBitmap = MutableLiveData<Bitmap?>(null)
+    val detectedProductsBitmap: LiveData<Bitmap?> = _detectedProductsBitmap
 
     private val _imageUri = MutableLiveData<Uri?>(null)
     val imageUri: LiveData<Uri?> = _imageUri
@@ -72,16 +79,11 @@ class PhotoViewModel(
         _imageUri.value = uri
     }
 
-    fun photoTaken(bitmap: Bitmap?) {
-        bitmap ?: run { _waitingForPhotoToast.value = true }
-        _bitmap.value = bitmap
-    }
-
     fun photoSaved() {
         _imageUri.value = orderInfo.imageUri
     }
 
-    fun gotBitmap(bitmap: Bitmap?) {
+    fun gotBitmap(bitmap: Bitmap?, context: Context) {
         viewModelScope.launch(Dispatchers.IO) {
             isLoading.postValue(true)
             bitmap?.let { b ->
@@ -119,7 +121,9 @@ class PhotoViewModel(
                 val imgWithResult = drawDetectionResult(bitmap, resultToDisplay)
 
                 currentBitmap = imgWithResult
-                _bitmap.postValue(imgWithResult)
+                _detectedProductsBitmap.postValue(imgWithResult)
+                orderInfo.imageUri = imagesRepository
+                    .saveBitmapWithDetectedProducts(imgWithResult, context)
                 isLoading.postValue(false)
             } ?: run {
                 _waitingForPhotoToast.postValue(true)
