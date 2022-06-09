@@ -2,6 +2,7 @@ package com.example.saladdetector.src.repos
 
 import android.content.Context
 import com.example.saladdetector.src.bd.SaladDatabase
+import com.example.saladdetector.src.bd.order.Order
 import com.example.saladdetector.src.bd.order.OrderDao
 import com.example.saladdetector.src.bd.product.ProductDAO
 import com.example.saladdetector.src.bd.product_order.ProductInOrder
@@ -13,7 +14,7 @@ import kotlinx.coroutines.withContext
 
 class OrderRepository (
     context: Context,
-    private val detectedImagesRef: StorageReference
+    private val detectedImagesRef: StorageReference,
 ) {
     private val orderDao: OrderDao
     private val productDao: ProductDAO
@@ -63,15 +64,24 @@ class OrderRepository (
 
     suspend fun insertOrder(orderInfo: OrderInfo): Int {
         return withContext(Dispatchers.IO) {
-            val order = orderInfo.toDbOrder()
-            orderDao.insertOrder(order).toInt()
+            val downloadUrl = uploadOrderPhoto(orderInfo)
+            val dbOrder = Order(
+                id = 0,
+                email = orderInfo.email,
+                totalPrice = orderInfo.products.sumOf { it.price * it.amount },
+                photoDownloadUrl = downloadUrl
+            )
+            orderDao.insertOrder(dbOrder).toInt()
         }
     }
 
-//    suspend fun insertOrderPhoto(orderInfo: OrderInfo, ) {
-//        withContext(Dispatchers.IO) {
-//            detectedImagesRef.
-//        }
-//    }
+    private suspend fun uploadOrderPhoto(orderInfo: OrderInfo): String {
+        return withContext(Dispatchers.IO) {
+            val ref = detectedImagesRef
+                .child("${orderInfo.email}/${System.currentTimeMillis()}")
+            ref.putFile(orderInfo.imageUri)
+            ref.downloadUrl.result.toString()
+        }
+    }
 
 }

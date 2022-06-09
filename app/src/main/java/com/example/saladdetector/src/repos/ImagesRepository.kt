@@ -13,9 +13,11 @@ import javax.inject.Inject
 
 class ImagesRepository @Inject constructor() {
 
+    @Suppress("BlockingMethodInNonBlockingContext")
     suspend fun saveBitmapWithDetectedProducts(bitmap: Bitmap, context: Context): Uri {
         return withContext(Dispatchers.IO) {
-            val file = File(context.filesDir, "detectedProducts/${System.currentTimeMillis()}.jpg")
+            val file = File(context.filesDir, "${System.currentTimeMillis()}")
+            file.createNewFile()
             val bos = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.JPEG, 0, bos)
             file.writeBytes(bos.toByteArray())
