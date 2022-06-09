@@ -5,15 +5,11 @@ import com.example.saladdetector.src.bd.SaladDatabase
 import com.example.saladdetector.src.bd.order.OrderDao
 import com.example.saladdetector.src.bd.product.ProductDAO
 import com.example.saladdetector.src.bd.product_order.ProductInOrder
-import com.example.saladdetector.src.di.DetectedImagesFirebaseReference
 import com.example.saladdetector.src.domain_entyties.DetectedProduct
 import com.example.saladdetector.src.domain_entyties.OrderInfo
-import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
 class OrderRepository (
     context: Context,

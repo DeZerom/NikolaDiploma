@@ -14,11 +14,12 @@ import com.example.saladdetector.src.bd.product_order.ProductInOrderDao
 @Suppress("ClassName")
 @Database(
     entities = [BdProduct::class, Order::class, ProductInOrder::class],
-    version = 6, autoMigrations = [
+    version = 7, autoMigrations = [
         AutoMigration(from = 2, to = 3),
         AutoMigration(from = 3, to = 4),
         AutoMigration(from = 4, to = 5, spec = SaladDatabase.AutoMigration_4_5::class),
-        AutoMigration(from = 5, to = 6, spec = SaladDatabase.AutoMigration_5_6::class)
+        AutoMigration(from = 5, to = 6, spec = SaladDatabase.AutoMigration_5_6::class),
+        AutoMigration(from = 6, to = 7)
     ],
     exportSchema = true,
 )
