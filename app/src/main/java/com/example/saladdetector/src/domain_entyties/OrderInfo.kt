@@ -9,5 +9,6 @@ data class OrderInfo(
     var totalSum: Double = 0.0,
     var email: String = "",
     var products: List<DetectedProduct> = emptyList(),
-    var imageUri: Uri = Uri.EMPTY
+    var imageUri: Uri = Uri.EMPTY,
+    val nameOnServer: String = ""
 ): Parcelable

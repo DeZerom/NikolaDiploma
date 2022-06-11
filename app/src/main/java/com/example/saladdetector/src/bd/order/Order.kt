@@ -9,5 +9,5 @@ data class Order(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "order_id") val id: Int,
     val email: String,
     val totalPrice: Double,
-    @ColumnInfo(defaultValue = "") val photoDownloadUrl: String
+    @ColumnInfo(defaultValue = "", name = "photoDownloadUrl") val nameOnServer: String
 )

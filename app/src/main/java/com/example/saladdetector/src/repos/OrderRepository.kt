@@ -6,15 +6,18 @@ import com.example.saladdetector.src.bd.order.Order
 import com.example.saladdetector.src.bd.order.OrderDao
 import com.example.saladdetector.src.bd.product.ProductDAO
 import com.example.saladdetector.src.bd.product_order.ProductInOrder
+import com.example.saladdetector.src.di.DetectedImagesFirebaseReference
 import com.example.saladdetector.src.domain_entyties.DetectedProduct
 import com.example.saladdetector.src.domain_entyties.OrderInfo
 import com.google.firebase.storage.StorageReference
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class OrderRepository (
-    context: Context,
-    private val detectedImagesRef: StorageReference,
+class OrderRepository @Inject constructor(
+    @ApplicationContext context: Context,
+    @DetectedImagesFirebaseReference private val detectedImagesRef: StorageReference,
 ) {
     private val orderDao: OrderDao
     private val productDao: ProductDAO
@@ -32,7 +35,8 @@ class OrderRepository (
                     OrderInfo(
                         totalSum = it.key.totalPrice,
                         email = it.key.email,
-                        products = getMatchingProducts(it.value)
+                        products = getMatchingProducts(it.value),
+                        nameOnServer = it.key.nameOnServer
                     )
                 }
         }
@@ -70,7 +74,7 @@ class OrderRepository (
                 id = 0,
                 email = orderInfo.email,
                 totalPrice = orderInfo.products.sumOf { it.price * it.amount },
-                photoDownloadUrl = downloadUrl
+                nameOnServer = downloadUrl
             )
             orderDao.insertOrder(dbOrder).toInt()
         }
@@ -83,7 +87,7 @@ class OrderRepository (
 
         ref.putFile(orderInfo.imageUri)
 
-        return ref.toString()
+        return filePathLastPart
     }
 
 }
