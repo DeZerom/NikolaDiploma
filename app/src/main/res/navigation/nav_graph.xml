@@ -31,12 +31,12 @@
         android:name="com.example.saladdetector.src.fragments.order_overview.OrderOverview"
         android:label="fragment_order_overview"
         tools:layout="@layout/fragment_order_overview" >
-        <argument
-            android:name="detectedProducts"
-            app:argType="com.example.saladdetector.src.domain_entyties.DetectedProduct[]" />
         <action
             android:id="@+id/action_orderOverview_to_billSendingFragment"
             app:destination="@id/billSendingFragment" />
+        <argument
+            android:name="orderInfo"
+            app:argType="com.example.saladdetector.src.domain_entyties.OrderInfo" />
     </fragment>
     <dialog
         android:id="@+id/passwordDialogFragment"

@@ -16,13 +16,14 @@ class ImagesRepository @Inject constructor() {
     @Suppress("BlockingMethodInNonBlockingContext")
     suspend fun saveBitmapWithDetectedProducts(bitmap: Bitmap, context: Context): Uri {
         return withContext(Dispatchers.IO) {
-            val file = File(context.filesDir, "${System.currentTimeMillis()}")
+            val file = File(context.filesDir, "${System.currentTimeMillis()}.jpeg")
             file.createNewFile()
             val bos = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 0, bos)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 75, bos)
             file.writeBytes(bos.toByteArray())
-            FileProvider.getUriForFile(
+            val uri = FileProvider.getUriForFile(
                 context, "${BuildConfig.APPLICATION_ID}.provider", file)
+            uri
         }
     }
 

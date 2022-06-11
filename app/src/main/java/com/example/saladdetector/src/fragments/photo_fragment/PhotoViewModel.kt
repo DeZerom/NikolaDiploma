@@ -48,7 +48,9 @@ class PhotoViewModel @Inject constructor(
 
     private val _detectedProducts = MutableLiveData<Array<DetectedProduct>?>()
     val detectedProducts: LiveData<Array<DetectedProduct>?> = _detectedProducts
-    val navigateToOrderScreen = MutableLiveData<Array<DetectedProduct>?>()
+
+    private val _navigateToOrderScreen = MutableLiveData<OrderInfo>()
+    val navigateToOrderScreen: LiveData<OrderInfo> = _navigateToOrderScreen
 
     val isLoading: MutableLiveData<Boolean> = MutableLiveData(false)
 
@@ -57,7 +59,7 @@ class PhotoViewModel @Inject constructor(
             R.id.photoFragment_takePhotoFab -> {
                 orderInfo.imageUri = FileProvider.getUriForFile(it.context,
                     "${BuildConfig.APPLICATION_ID}.provider",
-                    File(it.context.filesDir, "rawImages")
+                    File(it.context.filesDir, "rawImages.jpeg")
                 )
                 photoTaker.launch(orderInfo.imageUri)
             }
@@ -65,7 +67,10 @@ class PhotoViewModel @Inject constructor(
                 photoPicker.launch(MIME_IMAGE)
             }
             R.id.photoFragment_confirmPhotoFab -> {
-                navigateToOrderScreen.value = _detectedProducts.value
+                _navigateToOrderScreen.value = orderInfo.apply {
+                    products = detectedProducts.value?.toList() ?: emptyList()
+                    totalSum = products.sumOf { p -> p.price * p.amount }
+                }
             }
         }
     }

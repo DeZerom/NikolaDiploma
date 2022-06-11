@@ -9,8 +9,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.saladdetector.R
 import com.example.saladdetector.src.domain_entyties.OrderInfo
-import com.example.saladdetector.src.repos.ProductInOrderRepository
 import com.example.saladdetector.src.repos.OrderRepository
+import com.example.saladdetector.src.repos.ProductInOrderRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -31,6 +31,9 @@ class BillSendingViewModel @Inject constructor(
 
     private val _navigateToHome = MutableLiveData(false)
     val navigateToHome: LiveData<Boolean> = _navigateToHome
+
+    private val _exceptionOccurred = MutableLiveData(false)
+    val exceptionOccurred: LiveData<Boolean> = _exceptionOccurred
 
     val textChangedListener = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -55,6 +58,10 @@ class BillSendingViewModel @Inject constructor(
                     viewModelScope.launch {
                         orderInfo = orderInfo.copy(email = email)
                         val orderId = orderRepository.insertOrder(orderInfo)
+                        if (orderId == -1) {
+                            _exceptionOccurred.value = true
+                            return@launch
+                        }
                         productInOrderRepository.insertAllProductsFromOrderInfo(orderInfo, orderId)
                         _navigateToHome.postValue(true)
                     }
@@ -71,6 +78,10 @@ class BillSendingViewModel @Inject constructor(
 
     fun navigatedToHome() {
         _navigateToHome.value = false
+    }
+
+    fun exceptionOccurredToastShown() {
+        _exceptionOccurred.value = false
     }
 
 }

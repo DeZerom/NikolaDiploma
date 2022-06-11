@@ -1,19 +1,17 @@
 package com.example.saladdetector.src.fragments.bill_sending
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.saladdetector.R
-import com.example.saladdetector.src.domain_entyties.OrderInfo
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -48,6 +46,14 @@ class BillSendingFragment : Fragment() {
             if (it) {
                 Toast.makeText(requireContext(), getString(R.string.wrongEmailToast), Toast.LENGTH_LONG).show()
                 viewModel.wrongEmailToastShown()
+            }
+        }
+
+        viewModel.exceptionOccurred.observe(viewLifecycleOwner) {
+            if (it) {
+                Toast.makeText(requireContext(), getString(R.string.exceptionOccuredtoast),
+                    Toast.LENGTH_LONG).show()
+                viewModel.exceptionOccurredToastShown()
             }
         }
 

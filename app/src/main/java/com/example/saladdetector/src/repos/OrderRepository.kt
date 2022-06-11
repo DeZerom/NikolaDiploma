@@ -65,6 +65,7 @@ class OrderRepository (
     suspend fun insertOrder(orderInfo: OrderInfo): Int {
         return withContext(Dispatchers.IO) {
             val downloadUrl = uploadOrderPhoto(orderInfo)
+
             val dbOrder = Order(
                 id = 0,
                 email = orderInfo.email,
@@ -75,13 +76,14 @@ class OrderRepository (
         }
     }
 
-    private suspend fun uploadOrderPhoto(orderInfo: OrderInfo): String {
-        return withContext(Dispatchers.IO) {
-            val ref = detectedImagesRef
-                .child("${orderInfo.email}/${System.currentTimeMillis()}")
-            ref.putFile(orderInfo.imageUri)
-            ref.downloadUrl.result.toString()
-        }
+    private fun uploadOrderPhoto(orderInfo: OrderInfo): String {
+        val filePathLastPart = orderInfo.imageUri.pathSegments.last()
+        val ref = detectedImagesRef
+            .child("${orderInfo.email}/$filePathLastPart")
+
+        ref.putFile(orderInfo.imageUri)
+
+        return ref.toString()
     }
 
 }
